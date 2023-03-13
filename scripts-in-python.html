@@ -1101,6 +1101,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
   </ul></li>
   <li><a href="#resolving-symbolic-links" id="toc-resolving-symbolic-links">resolving symbolic links</a></li>
   <li><a href="#logging" id="toc-logging">logging</a></li>
+  <li><a href="#fzf" id="toc-fzf">fzf</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1169,6 +1170,15 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>logging.warning(<span class="st">&#39;This is a warning message&#39;</span>)</span>
 <span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>logging.error(<span class="st">&#39;This is an error message&#39;</span>)</span>
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>logging.critical(<span class="st">&#39;This is a critical message&#39;</span>)</span></code></pre></div>
+<h2 id="fzf">fzf</h2>
+<ul>
+<li>download <code>pyfzf.py</code> from <a href="https://github.com/nk412/pyfzf" class="uri">https://github.com/nk412/pyfzf</a></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyfzf <span class="im">import</span> FzfPrompt</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fzf <span class="op">=</span> FzfPrompt()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>choices <span class="op">=</span> [<span class="st">&#39;brucho&#39;</span>, <span class="st">&#39;nohy;predne&#39;</span>, <span class="st">&#39;nohy;zadne&#39;</span>, <span class="st">&#39;biceps&#39;</span>, <span class="st">&#39;triceps&#39;</span>, <span class="st">&#39;ramena&#39;</span>, <span class="st">&#39;hrudnik&#39;</span>, <span class="st">&#39;chrbat&#39;</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> fzf.prompt(choices, <span class="st">&#39;--cycle --no-info --height 20&#39;</span>)[<span class="dv">0</span>]</span></code></pre></div>
 </main>
 
 <script>

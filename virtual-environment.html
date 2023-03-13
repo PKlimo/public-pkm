@@ -1090,10 +1090,14 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
     <strong>Contents</strong><label for="contents">⊕</label>
   <input type="checkbox" id="contents">
   <ul>
-  <li><a href="#python-ecosystem" id="toc-python-ecosystem">python ecosystem</a>
+  <li><a href="#virtual-environment" id="toc-virtual-environment">virtual environment</a>
   <ul>
-  <li><a href="#template-with-logging" id="toc-template-with-logging">template with logging</a></li>
-  <li><a href="#resources" id="toc-resources">resources</a></li>
+  <li><a href="#common-info" id="toc-common-info">common info</a>
+  <ul>
+  <li><a href="#working-with-environment-from-shell" id="toc-working-with-environment-from-shell">working with environment from shell</a></li>
+  </ul></li>
+  <li><a href="#shared-environment" id="toc-shared-environment">shared environment</a></li>
+  <li><a href="#environment-as-subdirectory-of-script" id="toc-environment-as-subdirectory-of-script">environment as subdirectory of script</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1104,45 +1108,53 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
                 <a href="https://pandoc.org/">Pandoc</a> is a “universal document converter.” It is particularly good at generating HTML and <span class="math inline">\LaTeX</span> from Markdown. <br> <br>
             </span></span> </p>
             -->
-<h1 id="python-ecosystem">python ecosystem</h1>
+<h1 id="virtual-environment">virtual environment</h1>
 <ul>
-<li>analyzing data with package <a href="pandas.html">pandas</a></li>
-<li>good checklist / process description for data analyse is propose in <a href="data-analyse-python-panda.html">data-analyse-python-panda</a></li>
-<li>writing scripts instead of bash: <a href="scripts-in-python.html">scripts-in-python</a></li>
-<li>as version control system for scripts is used <a href="git.html">git</a> system</li>
-<li>for separating different versions of python packages is used <a href="virtual-environment.html">virtual-environment</a></li>
+<li>is system for managing different <a href="python.html">python</a> packages</li>
+<li>there are two possibilities:
+<ul>
+<li>have environment as subdirectory of python program</li>
+<li>have shared environments outside</li>
+</ul></li>
 </ul>
-<h2 id="template-with-logging">template with logging</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env -S python3 -B</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
+<h2 id="common-info">common info</h2>
+<ul>
+<li>install system package <code>virtualenv</code> via <code>pip install virtualenv</code></li>
+<li>to create virtual environment run <code>virtualenv env</code>
+<ul>
+<li>in current directory will be new subdirectory <code>env</code> with environment</li>
+</ul></li>
+</ul>
+<h3 id="working-with-environment-from-shell">working with environment from shell</h3>
+<ul>
+<li>activate created environment <code>source ./env/bin/activate</code></li>
+<li>install packages via <code>pip install pkg</code></li>
+<li>create requirements file <code>pip freeze &gt; requirements.txt</code></li>
+<li>exit virtual environment <code>deactive</code></li>
+</ul>
+<h2 id="shared-environment">shared environment</h2>
+<ul>
+<li>environment is installed in shared directory, e.g. <code>/home/peter/python/envs/</code></li>
+<li>more scripts can share one environment, e.g. panda - saving disk space</li>
+<li>script loads environment by specifing first line as <code>#!/home/peter/python/envs/pandas_rich/bin/python</code></li>
+<li>in this case script must have execution bit, can’t be run as <code>python3 script.py</code></li>
+</ul>
+<h2 id="environment-as-subdirectory-of-script">environment as subdirectory of script</h2>
+<ul>
+<li>less preferable, it is necessary to exclude environment from <a href="git.html">git</a>
+<ul>
+<li>create <code>.gitignore</code> file with <code>env/</code> line</li>
+<li>file <code>requirements.txt</code> should be in repository</li>
+</ul></li>
+<li>it is possible to load script in environment even if shebang is locked to system interpreter</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    logging.debug(<span class="ss">f&quot;entering main() function&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># logger init</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    log_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">%(asctime)s</span><span class="st">:</span><span class="sc">%(levelname)s</span><span class="st">:</span><span class="sc">%(name)s</span><span class="st">:</span><span class="sc">%(funcName)s</span><span class="st">:</span><span class="sc">%(lineno)d</span><span class="st">:</span><span class="sc">%(message)s</span><span class="st">&#39;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">&quot;-vv&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]: logging_level <span class="op">=</span> logging.DEBUG</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="st">&quot;-v&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]: logging_level <span class="op">=</span> logging.INFO</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: logging_level <span class="op">=</span> logging.WARNING</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    logging.basicConfig(<span class="bu">format</span><span class="op">=</span>log_format, level<span class="op">=</span>logging_level)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># setting global variables</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    dry_run <span class="op">=</span> <span class="st">&quot;-d&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:] <span class="kw">or</span> <span class="st">&quot;--dry-run&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    logging.debug(<span class="ss">f&quot;</span><span class="sc">{</span>dry_run<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    cur_dir <span class="op">=</span> pathlib.Path(<span class="va">__file__</span>).parent.resolve()</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    logging.debug(<span class="ss">f&quot;</span><span class="sc">{</span>cur_dir<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
-<h2 id="resources">resources</h2>
-<ul>
-<li>calendar heat map <a href="https://www.guru99.com/calendar-in-python.html" class="uri">https://www.guru99.com/calendar-in-python.html</a></li>
-</ul>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>cur_dir <span class="op">=</span> pathlib.Path(<span class="va">__file__</span>).resolve().parent</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>activate_this_file <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>cur_dir<span class="sc">}</span><span class="ss">/env/bin/activate_this.py&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(<span class="bu">compile</span>(<span class="bu">open</span>(activate_this_file, <span class="st">&quot;rb&quot;</span>).read(), activate_this_file, <span class="st">&#39;exec&#39;</span>), <span class="bu">dict</span>(<span class="va">__file__</span><span class="op">=</span>activate_this_file))</span></code></pre></div>
 </main>
 
 <script>

@@ -1090,10 +1090,43 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
     <strong>Contents</strong><label for="contents">⊕</label>
   <input type="checkbox" id="contents">
   <ul>
-  <li><a href="#python-ecosystem" id="toc-python-ecosystem">python ecosystem</a>
+  <li><a href="#pandas" id="toc-pandas">pandas</a>
   <ul>
-  <li><a href="#template-with-logging" id="toc-template-with-logging">template with logging</a></li>
-  <li><a href="#resources" id="toc-resources">resources</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation">data preparation</a>
+  <ul>
+  <li><a href="#reading-data-from-csv-file" id="toc-reading-data-from-csv-file">reading data from csv file</a></li>
+  <li><a href="#setting-data-types" id="toc-setting-data-types">setting data types</a></li>
+  </ul></li>
+  <li><a href="#basic-information-about-table" id="toc-basic-information-about-table">basic information about table</a>
+  <ul>
+  <li><a href="#general-information-about-table" id="toc-general-information-about-table">general information about table</a></li>
+  <li><a href="#overview-of-values-in-column" id="toc-overview-of-values-in-column">overview of values in column</a></li>
+  <li><a href="#plotting-graphs" id="toc-plotting-graphs">plotting graphs</a></li>
+  <li><a href="#exporting-printing-dataframe" id="toc-exporting-printing-dataframe">exporting / printing dataframe</a></li>
+  </ul></li>
+  <li><a href="#working-with-data-in-table" id="toc-working-with-data-in-table">working with data in table</a>
+  <ul>
+  <li><a href="#accessing-value-of-cell-by-index" id="toc-accessing-value-of-cell-by-index">accessing value of cell by index</a></li>
+  <li><a href="#applying-python-function-on-each-row-axis-1" id="toc-applying-python-function-on-each-row-axis-1">applying python function on each row (axis = 1)</a></li>
+  <li><a href="#value-mapping" id="toc-value-mapping">value mapping</a></li>
+  <li><a href="#filling-missing-values-replacing-nan" id="toc-filling-missing-values-replacing-nan">filling missing values (replacing NaN)</a></li>
+  <li><a href="#filtering-rows" id="toc-filtering-rows">filtering rows</a></li>
+  <li><a href="#delete-remove-rows-columns-where-value-in-missing-nan" id="toc-delete-remove-rows-columns-where-value-in-missing-nan">delete / remove rows / columns where value in missing (NaN)</a></li>
+  <li><a href="#sorting" id="toc-sorting">sorting</a></li>
+  </ul></li>
+  <li><a href="#working-with-table-structure" id="toc-working-with-table-structure">working with table structure</a>
+  <ul>
+  <li><a href="#renaming-columns" id="toc-renaming-columns">renaming columns</a></li>
+  <li><a href="#deleting-columns" id="toc-deleting-columns">deleting columns</a></li>
+  </ul></li>
+  <li><a href="#creating-new-tables" id="toc-creating-new-tables">creating new tables</a>
+  <ul>
+  <li><a href="#aggregation-pivot-tables" id="toc-aggregation-pivot-tables">aggregation / pivot tables</a></li>
+  <li><a href="#combining-aggregation-with-original-table" id="toc-combining-aggregation-with-original-table">combining aggregation with original table</a></li>
+  <li><a href="#merging-tables-by-rows-columns-are-same---merging-under" id="toc-merging-tables-by-rows-columns-are-same---merging-under">merging tables by rows (columns are same) - merging under</a></li>
+  <li><a href="#merging-tables-by-columns-index-of-rows-are-same---merging-next" id="toc-merging-tables-by-columns-index-of-rows-are-same---merging-next">merging tables by columns (index of rows are same) - merging next</a></li>
+  <li><a href="#reverse-pivot-table" id="toc-reverse-pivot-table">reverse pivot table</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -1104,44 +1137,151 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
                 <a href="https://pandoc.org/">Pandoc</a> is a “universal document converter.” It is particularly good at generating HTML and <span class="math inline">\LaTeX</span> from Markdown. <br> <br>
             </span></span> </p>
             -->
-<h1 id="python-ecosystem">python ecosystem</h1>
+<h1 id="pandas">pandas</h1>
+<p>is <a href="python.html">python</a> module for working with tables a data processing, usually for <a href="data-analyse-python-panda.html">data-analyse-python-panda</a></p>
+<h2 id="data-preparation">data preparation</h2>
+<h3 id="reading-data-from-csv-file">reading data from csv file</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="ss">f&quot;</span><span class="sc">{</span>cur_dir<span class="sc">}</span><span class="ss">/cvicenie.csv&quot;</span> ,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    sep <span class="op">=</span> <span class="st">&quot;;&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    names <span class="op">=</span> [<span class="st">&#39;datum&#39;</span>,<span class="st">&#39;od&#39;</span>,<span class="st">&#39;do&#39;</span>,<span class="st">&#39;cv&#39;</span>,<span class="st">&#39;pozn&#39;</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    parse_dates<span class="op">=</span>[<span class="st">&#39;datum&#39;</span>,<span class="st">&#39;od&#39;</span>, <span class="st">&#39;do&#39;</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    dayfirst<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    dtype <span class="op">=</span> {<span class="st">&#39;cv&#39;</span>:<span class="st">&#39;category&#39;</span>, <span class="st">&#39;pozn&#39;</span>:<span class="st">&#39;category&#39;</span>},</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    keep_default_na<span class="op">=</span><span class="va">False</span>, <span class="co"># empty string won&#39;t be NaN</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    on_bad_lines<span class="op">=</span><span class="st">&#39;error&#39;</span>, <span class="co"># or &#39;skip&#39; or &#39;warn&#39;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    memory_map<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># usecols = [&#39;datum&#39;]</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><code>df</code> contains whole table (all rows) and is type <code>pd.DataFrame()</code></p>
+<h3 id="setting-data-types">setting data types</h3>
 <ul>
-<li>analyzing data with package <a href="pandas.html">pandas</a></li>
-<li>good checklist / process description for data analyse is propose in <a href="data-analyse-python-panda.html">data-analyse-python-panda</a></li>
-<li>writing scripts instead of bash: <a href="scripts-in-python.html">scripts-in-python</a></li>
-<li>as version control system for scripts is used <a href="git.html">git</a> system</li>
-<li>for separating different versions of python packages is used <a href="virtual-environment.html">virtual-environment</a></li>
+<li>best practice is to set correct types when reading data because of saving memory</li>
+<li>when creating new columns:</li>
 </ul>
-<h2 id="template-with-logging">template with logging</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env -S python3 -B</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    logging.debug(<span class="ss">f&quot;entering main() function&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># logger init</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    log_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">%(asctime)s</span><span class="st">:</span><span class="sc">%(levelname)s</span><span class="st">:</span><span class="sc">%(name)s</span><span class="st">:</span><span class="sc">%(funcName)s</span><span class="st">:</span><span class="sc">%(lineno)d</span><span class="st">:</span><span class="sc">%(message)s</span><span class="st">&#39;</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">&quot;-vv&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]: logging_level <span class="op">=</span> logging.DEBUG</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> <span class="st">&quot;-v&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]: logging_level <span class="op">=</span> logging.INFO</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: logging_level <span class="op">=</span> logging.WARNING</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    logging.basicConfig(<span class="bu">format</span><span class="op">=</span>log_format, level<span class="op">=</span>logging_level)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># setting global variables</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    dry_run <span class="op">=</span> <span class="st">&quot;-d&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:] <span class="kw">or</span> <span class="st">&quot;--dry-run&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    logging.debug(<span class="ss">f&quot;</span><span class="sc">{</span>dry_run<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    cur_dir <span class="op">=</span> pathlib.Path(<span class="va">__file__</span>).parent.resolve()</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    logging.debug(<span class="ss">f&quot;</span><span class="sc">{</span>cur_dir<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
-<h2 id="resources">resources</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;datum&#39;</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">&#39;datum&#39;</span>], dayfirst <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;od&#39;</span>] <span class="op">=</span> pd.to_datetime(df[<span class="st">&#39;od&#39;</span>], <span class="bu">format</span><span class="op">=</span><span class="st">&#39;%H:%M:%S&#39;</span>) <span class="co"># time</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;sekund&#39;</span>] <span class="op">=</span> pd.to_timedelta(df[<span class="st">&quot;cas&quot;</span>], unit<span class="op">=</span><span class="st">&#39;s&#39;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;pocet hodin&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;od&#39;</span>].dt.total_seconds()<span class="op">//</span><span class="dv">3600</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;pocet hodin&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;pocet hodin&#39;</span>].astype(<span class="st">&#39;int64&#39;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;rok&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;datum&#39;</span>].dt.year <span class="co"># year</span></span></code></pre></div>
 <ul>
-<li>calendar heat map <a href="https://www.guru99.com/calendar-in-python.html" class="uri">https://www.guru99.com/calendar-in-python.html</a></li>
+<li><code>df[&#39;rok&#39;]</code> is column of table and is type <code>pd.Series</code></li>
+<li>there are more attributes (not only <code>year</code>) when working with dates, e.g.:
+<ul>
+<li>pandas.Series.dt.isocalendar</li>
+<li>pandas.Series.dt.dayofweek</li>
+<li>pandas.Series.dt.dayofyear</li>
+</ul></li>
+</ul>
+<h2 id="basic-information-about-table">basic information about table</h2>
+<h3 id="general-information-about-table">general information about table</h3>
+<ul>
+<li><code>df.info(verbose=True, memory_usage=&quot;deep&quot;)</code> size of whole data frame in memory</li>
+<li><code>df.memory_usage(deep=True)</code> size of memory by each column</li>
+<li><code>df.describe(include=&#39;all&#39;)</code></li>
+<li><code>df.shape</code></li>
+<li><code>df.head()</code> / <code>df.tail(5)</code></li>
+<li><code>df.value_counts()</code></li>
+<li><code>df.isna().sum()</code> overview of how many values are missing (equals <code>NaN</code>) in each column</li>
+</ul>
+<h3 id="overview-of-values-in-column">overview of values in column</h3>
+<ul>
+<li><code>df[&#39;col&#39;].value_counts()</code> for one column</li>
+<li><code>pd.crosstab(df[&#39;col1&#39;], df[&#39;col2&#39;], margins=True)</code> for two columns</li>
+</ul>
+<h3 id="plotting-graphs">plotting graphs</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plt <span class="op">=</span> df.plot(y<span class="op">=</span><span class="st">&#39;perc&#39;</span>, kind<span class="op">=</span><span class="st">&#39;bar&#39;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.get_legend().remove()</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.figure.savefig(<span class="st">&#39;pok.png&#39;</span>)</span></code></pre></div>
+<h3 id="exporting-printing-dataframe">exporting / printing dataframe</h3>
+<ul>
+<li><code>df.to_markdown(tablefmt=&#39;psql&#39;))</code></li>
+<li><code>df.to_string(header=False, index_names=False)</code></li>
+<li><code>df.to_markdown(tablefmt=&quot;plain&quot;, headers=[])</code></li>
+</ul>
+<h2 id="working-with-data-in-table">working with data in table</h2>
+<h3 id="accessing-value-of-cell-by-index">accessing value of cell by index</h3>
+<ul>
+<li>method <code>df.at(index, collumn)</code></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;num_day&#39;</span>]<span class="op">=</span> (df[<span class="st">&#39;datum&#39;</span>] <span class="op">-</span> df.at[<span class="dv">0</span>, <span class="st">&#39;datum&#39;</span>]).dt.days</span></code></pre></div>
+<h3 id="applying-python-function-on-each-row-axis-1">applying python function on each row (axis = 1)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">format</span>(cv, pozn, cas):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    cvic <span class="op">=</span> <span class="ss">f&quot;</span><span class="sc">{</span>cv<span class="sc">}{</span><span class="st">&#39;&#39;</span> <span class="cf">if</span> pd<span class="sc">.</span>isnull(pozn) <span class="cf">else</span> <span class="st">&#39; &#39;</span><span class="op">+</span>pozn<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    time <span class="op">=</span> <span class="bu">str</span>(cas).replace(<span class="st">&quot;0 days&quot;</span>,<span class="st">&#39;&#39;</span>).strip()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&quot;</span><span class="sc">{</span>cvic<span class="sc">:&lt;11}</span><span class="ss"> </span><span class="sc">{</span>time<span class="sc">}</span><span class="ss">&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> df.<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="bu">format</span>(x.cv, x.pozn, x.cas), axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div>
+<p><code>df.apply()</code> returns new column of type <code>pd.Series</code>, that can be append to table, or use otherwise</p>
+<h3 id="value-mapping">value mapping</h3>
+<ul>
+<li>in column <code>df[&#39;col&#39;]</code> replace values <code>hod1</code> and <code>hod2</code> by new values <code>new1</code> and <code>new2</code></li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&#39;col&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;col&#39;</span>].<span class="bu">map</span>({<span class="st">&#39;hod1&#39;</span>:<span class="st">&#39;new1&#39;</span>, <span class="st">&#39;hod2&#39;</span>:<span class="st">&#39;new2&#39;</span>})</span></code></pre></div>
+<ul>
+<li>in column <code>df[&#39;col&#39;]</code> replace (number) values from intervals <code>bin</code> by text labels</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pd.cut(df[<span class="st">&#39;col&#39;</span>], bins<span class="op">=</span>[<span class="dv">0</span>,<span class="dv">18</span>,<span class="dv">25</span>,<span class="dv">99</span>], labels<span class="op">=</span>[<span class="st">&#39;child&#39;</span>,<span class="st">&#39;adolescent&#39;</span>,<span class="st">&#39;adult&#39;</span>])</span></code></pre></div>
+<h3 id="filling-missing-values-replacing-nan">filling missing values (replacing NaN)</h3>
+<ul>
+<li><code>df[&#39;col&#39;] = df[&#39;col&#39;].fillna(&#39;hodnota&#39;)</code> by constant</li>
+<li><code>df.interpolate()</code> by default linear interpolation - can be changed with parameter <code>method</code></li>
+</ul>
+<h3 id="filtering-rows">filtering rows</h3>
+<ul>
+<li><code>new_df = df[df[&#39;datum&#39;] == today.strftime(&quot;%Y-%m-%d&quot;)]</code></li>
+<li><code>df = df.query(&#39;cv != &quot;brucho&quot;&#39;).reset_index(drop=True)</code></li>
+</ul>
+<h3 id="delete-remove-rows-columns-where-value-in-missing-nan">delete / remove rows / columns where value in missing (NaN)</h3>
+<ul>
+<li><code>df.dropna(axis=&#39;columns&#39;)</code> delete columns</li>
+<li><code>df.dropna(axis=&#39;index&#39;)</code> delete rows</li>
+<li>parameter <code>subset</code> allows to specify rows / columns in which value <code>NaN</code> should be searched</li>
+</ul>
+<h3 id="sorting">sorting</h3>
+<ul>
+<li><code>df.sort_values(&#39;rok&#39;, ascending=True)</code> by one column</li>
+<li><code>df.sort_values([&#39;pause&#39;, &#39;datum&#39;], ascending=[False, False])</code> by more columns</li>
+</ul>
+<h2 id="working-with-table-structure">working with table structure</h2>
+<h3 id="renaming-columns">renaming columns</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># setting new names for each collumns</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> [<span class="st">&#39;odcviceny cas&#39;</span>, <span class="st">&#39;pocet cviceni&#39;</span>]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># setting new names only selected collumns</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>df.rename(columns<span class="op">=</span>{<span class="st">&quot;pocet dni&quot;</span>:<span class="st">&quot;days&quot;</span>, <span class="st">&quot;pocet cviceni&quot;</span>:<span class="st">&quot;trainings&quot;</span>, <span class="st">&quot;pocet hodin&quot;</span>:<span class="st">&quot;hours&quot;</span>})</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># mass renaming by string manipulation with collumn&#39;s names</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> df.columns.<span class="bu">str</span>.replace(<span class="st">&#39; &#39;</span>,<span class="st">&#39;_&#39;</span>)</span></code></pre></div>
+<h3 id="deleting-columns">deleting columns</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.pop(<span class="st">&#39;rok&#39;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.drop([<span class="st">&#39;cv&#39;</span>, <span class="st">&#39;num_day&#39;</span>], axis<span class="op">=</span><span class="st">&quot;columns&quot;</span>)</span></code></pre></div>
+<h2 id="creating-new-tables">creating new tables</h2>
+<h3 id="aggregation-pivot-tables">aggregation / pivot tables</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>new_df <span class="op">=</span> df.groupby(<span class="st">&#39;rok&#39;</span>).agg({<span class="st">&#39;odcviceny cas&#39;</span>: [<span class="st">&#39;sum&#39;</span>, <span class="st">&#39;count&#39;</span>], <span class="st">&#39;pocet cviceni&#39;</span>:[<span class="st">&#39;sum&#39;</span>]})</span></code></pre></div>
+<p>in case of group by on datetime value, we can use method <code>df.resample()</code></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>new_df <span class="op">=</span> df.resample(<span class="st">&#39;Y&#39;</span>, on<span class="op">=</span><span class="st">&#39;datum&#39;</span>).agg()</span></code></pre></div>
+<p>if we are groupping by index, parameter <code>on</code> can be omitted</p>
+<h3 id="combining-aggregation-with-original-table">combining aggregation with original table</h3>
+<ul>
+<li>point 19 in <a href="https://youtu.be/RlIiVeig3hc?t=1121">“My top 25 pandas tricks” by “Data School”</a></li>
+<li>method <code>pandas.DataFrame.transform()</code></li>
+<li><code>df[&#39;new&#39;] = df.groupby(&#39;group_column&#39;)[&#39;input_col&#39;].transform(fn)</code></li>
+<li><code>df[&#39;total price&#39;] = df.groupby(&#39;id&#39;)[&#39;price&#39;].transform(sum)</code></li>
+</ul>
+<h3 id="merging-tables-by-rows-columns-are-same---merging-under">merging tables by rows (columns are same) - merging under</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>new_df <span class="op">=</span> pd.concat([df1, df2], axis <span class="op">=</span> <span class="dv">0</span>)</span></code></pre></div>
+<h3 id="merging-tables-by-columns-index-of-rows-are-same---merging-next">merging tables by columns (index of rows are same) - merging next</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">all</span> <span class="op">=</span> [df1.reset_index(drop<span class="op">=</span><span class="va">True</span>), df2.reset_index(drop<span class="op">=</span><span class="va">True</span>)]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> pd.concat(<span class="bu">all</span>, axis<span class="op">=</span><span class="dv">1</span>, ignore_index<span class="op">=</span><span class="va">True</span>)</span></code></pre></div>
+<h3 id="reverse-pivot-table">reverse pivot table</h3>
+<ul>
+<li><code>df.melt()</code> conversion from wide format (pivot table) to long format</li>
 </ul>
 </main>
 
