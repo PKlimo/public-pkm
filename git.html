@@ -1113,7 +1113,8 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
   <li><a href="#working-with-git-structure" id="toc-working-with-git-structure">Working with git structure</a>
   <ul>
   <li><a href="#branches" id="toc-branches">branches</a></li>
-  <li><a href="#commits" id="toc-commits">commits</a></li>
+  <li><a href="#commits-in-general" id="toc-commits-in-general">commits in general</a></li>
+  <li><a href="#editing-commits" id="toc-editing-commits">editing commits</a></li>
   <li><a href="#repositories" id="toc-repositories">repositories</a></li>
   </ul></li>
   <li><a href="#working-with-files-in-repository" id="toc-working-with-files-in-repository">Working with files in repository</a></li>
@@ -1221,7 +1222,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><code>git merge new_branch</code> merge <code>new_branch</code> into current one (master)</li>
 <li><code>git branch -d new_branch</code> delete branch (after merging)</li>
 </ul>
-<h3 id="commits">commits</h3>
+<h3 id="commits-in-general">commits in general</h3>
 <ul>
 <li><code>git add -A</code> add all files (not tracked, modified) to be committed in next commit (add files to index)</li>
 <li><code>git commit -a -m &quot;toto je komentar&quot;</code>
@@ -1232,6 +1233,38 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li><code>git reset HEAD^ --hard</code> put the repository to state in previous commit, last commit is discarted</li>
 <li><code>git reset HEAD^</code> discard the last commit, files are modified, necessary <code>git restore</code> to also discard change in files</li>
 <li><code>git reset sha_commitu --hard</code> restore files to state as they were after commit</li>
+</ul>
+<h3 id="editing-commits">editing commits</h3>
+<h4 id="joining-squashing-commits">joining / squashing commits</h4>
+<p><a href="https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed" class="uri">https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed</a></p>
+<pre><code>Assume the following history exists and the current branch is &quot;topic&quot;:
+
+          A---B---C topic
+         /
+    D---E---F---G master
+From this point, the result of either of the following commands:
+
+git rebase master
+git rebase master topic
+would be:
+
+                  A&#39;--B&#39;--C&#39; topic
+                 /
+    D---E---F---G master</code></pre>
+<ul>
+<li><code>git rebase -i main~3</code> squash last 3 commits into one on main branch in local repository</li>
+<li><code>git rebase -i origin/main~3 main</code> same as previous, but squash last 3 commits from origin/main branch</li>
+<li><code>git push origin +master</code> update origin with local (squashed) branch. <code>+</code> means <code>--force</code></li>
+</ul>
+<h4 id="rewriting-commit-message">rewriting commit message</h4>
+<p>Last commit:</p>
+<ul>
+<li><code>git commit --amend</code> rewriting the most recent commit message</li>
+<li><code>git push --force-with-lease origin main</code> push rewriting to remote repository</li>
+</ul>
+<p>Older commits:</p>
+<ul>
+<li><code>git rebase -i HEAD~3</code></li>
 </ul>
 <h3 id="repositories">repositories</h3>
 <ul>
