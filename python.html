@@ -1092,6 +1092,7 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
   <ul>
   <li><a href="#python-ecosystem" id="toc-python-ecosystem">python ecosystem</a>
   <ul>
+  <li><a href="#invoking-interpreter" id="toc-invoking-interpreter">invoking interpreter</a></li>
   <li><a href="#template-with-logging" id="toc-template-with-logging">template with logging</a></li>
   <li><a href="#resources" id="toc-resources">resources</a></li>
   </ul></li>
@@ -1111,6 +1112,19 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
 <li>writing scripts instead of bash: <a href="scripts-in-python.html">scripts-in-python</a></li>
 <li>as version control system for scripts is used <a href="git.html">git</a> system</li>
 <li>for separating different versions of python packages is used <a href="virtual-environment.html">virtual-environment</a></li>
+<li>for testing is used framework <a href="pytest.html">pytest</a></li>
+</ul>
+<h2 id="invoking-interpreter">invoking interpreter</h2>
+<ul>
+<li>can be used system default by <code>#!/usr/bin/env -S python3 -B</code>
+<ul>
+<li>argument <code>-S</code> in <code>env</code> allows to pass arguments to python interpreter</li>
+<li>argument <code>-B</code> in python interpreter forbid to create <code>__pycache__</code> directory with compiled byte code</li>
+</ul></li>
+<li>also can be used interpreter from virtual environment (e.g. see <code>pandas_cvicenie.py</code>)
+<ul>
+<li><code>#!/home/peter/python/envs/pandas_rich/bin/python</code></li>
+</ul></li>
 </ul>
 <h2 id="template-with-logging">template with logging</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env -S python3 -B</span></span>

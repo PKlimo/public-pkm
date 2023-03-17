@@ -1090,18 +1090,11 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
     <strong>Contents</strong><label for="contents">⊕</label>
   <input type="checkbox" id="contents">
   <ul>
-  <li><a href="#scripts-in-python" id="toc-scripts-in-python">scripts in python</a>
+  <li><a href="#pytest" id="toc-pytest">pytest</a>
   <ul>
-  <li><a href="#shebang" id="toc-shebang">shebang</a></li>
-  <li><a href="#exec-command" id="toc-exec-command">exec command</a>
-  <ul>
-  <li><a href="#single-process---parse-output" id="toc-single-process---parse-output">single process - parse output</a></li>
-  <li><a href="#single-process-without-capturing-output" id="toc-single-process-without-capturing-output">single process without capturing output</a></li>
-  <li><a href="#piped-commands" id="toc-piped-commands">piped commands</a></li>
-  </ul></li>
-  <li><a href="#resolving-symbolic-links" id="toc-resolving-symbolic-links">resolving symbolic links</a></li>
-  <li><a href="#logging" id="toc-logging">logging</a></li>
-  <li><a href="#fzf" id="toc-fzf">fzf</a></li>
+  <li><a href="#directory-organisation" id="toc-directory-organisation">directory organisation</a></li>
+  <li><a href="#creating-tests" id="toc-creating-tests">creating tests</a></li>
+  <li><a href="#invoking-tests" id="toc-invoking-tests">invoking tests</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1112,76 +1105,60 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
                 <a href="https://pandoc.org/">Pandoc</a> is a “universal document converter.” It is particularly good at generating HTML and <span class="math inline">\LaTeX</span> from Markdown. <br> <br>
             </span></span> </p>
             -->
-<h1 id="scripts-in-python">scripts in python</h1>
-<p>describes some tips, how to write small shell scripts in <a href="python.html">python</a> instead of bash</p>
-<h2 id="shebang">shebang</h2>
+<h1 id="pytest">pytest</h1>
+<p>is a framework for testing <a href="python.html">python</a> scripts</p>
+<h2 id="directory-organisation">directory organisation</h2>
 <ul>
-<li>argument <code>-B</code> in python interpreter forbid to create <code>__pycache__</code> directory with compiled byte code</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env -S python3 -B</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span></code></pre></div>
-<h2 id="exec-command">exec command</h2>
-<h3 id="single-process---parse-output">single process - parse output</h3>
+<li>in project directory is / are scripts e.g. <code>collect_YAML_headers.py</code></li>
+<li>special directory <code>tests</code> (name is arbitrary), that contains:
 <ul>
-<li><code>shlex</code> (shell lexical analyzer) has method <code>split()</code> that parses string into list</li>
-<li><code>subprocess.run()</code> needs in first argument parsed list (provided by <code>shlex.split()</code></li>
-<li>good for single process execution, shell pipes don’t work</li>
+<li>tests for each script in form <code>test_scipt.py</code></li>
+<li>testing data</li>
+</ul></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shlex</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_output(cmd):</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> subprocess.run(shlex.split(cmd),</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        check<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        universal_newlines<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        stdout<span class="op">=</span>subprocess.PIPE).stdout</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> out.strip().split(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>cmd <span class="op">=</span> <span class="st">&#39;git ls-tree --full-tree -r --name-only HEAD&#39;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> line <span class="kw">in</span> run_output(cmd):</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> pathlib.PosixPath(<span class="ss">f&quot;/data/notes/</span><span class="sc">{</span>line<span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> p.is_file():</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(line)</span></code></pre></div>
-<h3 id="single-process-without-capturing-output">single process without capturing output</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>subprocess.run([<span class="st">&#39;cvshow&#39;</span>])</span></code></pre></div>
-<h3 id="piped-commands">piped commands</h3>
+<!-- -->
+<pre><code>project
+ |-collect_YAML_headers.py
+ |-test.sh
+ |-tests
+ | |-test_collect_YAML_headers.py
+ | |-data
+ | | |-python.md
+ | | |-openssl.md
+ | | |-Jordan Peterson.md
+ | | |-tinder_howto.md</code></pre>
+<h2 id="creating-tests">creating tests</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> collect_YAML_headers <span class="im">as</span> tm</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test_tc2():</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot; openssl.md doesn&#39;t contain YAML header, also is not a valid YAML document &quot;&quot;&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># YAML header is empty, File path ends with correct file name</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> tm.get_knode_info(<span class="st">&#39;./tests/data/openssl.md&#39;</span>).endswith(<span class="st">&#39;/openssl.md;&#39;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># test for correct name of knowledge node</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> tm.get_knode_info(<span class="st">&#39;./tests/data/openssl.md&#39;</span>).startswith(<span class="st">&#39;openssl.md;&#39;</span>)</span></code></pre></div>
+<h2 id="invoking-tests">invoking tests</h2>
 <ul>
-<li>easiest way is to use shell (<code>shell=True</code>) with method <code>check_output()</code></li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> subprocess.check_output(cmd, shell<span class="op">=</span><span class="va">True</span>, encoding<span class="op">=</span><span class="st">&quot;utf-8&quot;</span>).strip()</span></code></pre></div>
-<h2 id="resolving-symbolic-links">resolving symbolic links</h2>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cur_dir <span class="op">=</span> pathlib.Path(<span class="va">__file__</span>).parent.resolve()</span></code></pre></div>
-<h2 id="logging">logging</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># logger init</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>log_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">%(asctime)s</span><span class="st">:</span><span class="sc">%(levelname)s</span><span class="st">:</span><span class="sc">%(name)s</span><span class="st">:</span><span class="sc">%(funcName)s</span><span class="st">:</span><span class="sc">%(lineno)d</span><span class="st">:</span><span class="sc">%(message)s</span><span class="st">&#39;</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&quot;-vv&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]: logging_level <span class="op">=</span> logging.DEBUG</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> <span class="st">&quot;-v&quot;</span> <span class="kw">in</span> sys.argv[<span class="dv">1</span>:]: logging_level <span class="op">=</span> logging.INFO</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>: logging_level <span class="op">=</span> logging.WARNING</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>logging.basicConfig(<span class="bu">format</span><span class="op">=</span>log_format, level<span class="op">=</span>logging_level)</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># using logger</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>logging.debug(<span class="st">&#39;This is a debug message&#39;</span>)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>logging.info(<span class="st">&#39;This is an info message&#39;</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>logging.warning(<span class="st">&#39;This is a warning message&#39;</span>)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>logging.error(<span class="st">&#39;This is an error message&#39;</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>logging.critical(<span class="st">&#39;This is a critical message&#39;</span>)</span></code></pre></div>
-<h2 id="fzf">fzf</h2>
+<li>usually from bash script, which can pass optional arguments
 <ul>
-<li>download <code>pyfzf.py</code> from <a href="https://github.com/nk412/pyfzf" class="uri">https://github.com/nk412/pyfzf</a></li>
+<li><code>-s</code> by default pytest captures stdout, argument <code>-s</code> allows print()</li>
+<li><code>-v</code> and <code>-vv</code> increase verbosity</li>
+</ul></li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyfzf <span class="im">import</span> FzfPrompt</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fzf <span class="op">=</span> FzfPrompt()</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>choices <span class="op">=</span> [<span class="st">&#39;brucho&#39;</span>, <span class="st">&#39;nohy;predne&#39;</span>, <span class="st">&#39;nohy;zadne&#39;</span>, <span class="st">&#39;biceps&#39;</span>, <span class="st">&#39;triceps&#39;</span>, <span class="st">&#39;ramena&#39;</span>, <span class="st">&#39;hrudnik&#39;</span>, <span class="st">&#39;chrbat&#39;</span>]</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> fzf.prompt(choices, <span class="st">&#39;--cycle --no-info --height 20&#39;</span>)[<span class="dv">0</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env bash</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-B</span> <span class="at">-m</span> pytest <span class="at">-p</span> no:cacheprovider <span class="at">--no-header</span> <span class="st">&quot;</span><span class="va">$@</span><span class="st">&quot;</span></span></code></pre></div>
+<ul>
+<li>good to invoke from project root directory</li>
+<li>invoking this way (instead of <code>pytest</code>) correctly sets the variable <code>$PYTHONPATH</code>
+<ul>
+<li>add “current working directory”</li>
+<li>prevents error when importing functions in tests from tested module / script</li>
+</ul></li>
+<li>arguments
+<ul>
+<li><code>python -B</code> prevents from creating <code>__pycache__</code> directory</li>
+<li><code>pytest -p no:cacheprovider</code> prevents <code>.cache</code> directory</li>
+</ul></li>
+</ul>
 </main>
 
 <script>
