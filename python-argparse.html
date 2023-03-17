@@ -1090,11 +1090,10 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
     <strong>Contents</strong><label for="contents">⊕</label>
   <input type="checkbox" id="contents">
   <ul>
-  <li><a href="#python-ecosystem" id="toc-python-ecosystem">python ecosystem</a>
+  <li><a href="#argparse" id="toc-argparse">argparse</a>
   <ul>
-  <li><a href="#invoking-interpreter" id="toc-invoking-interpreter">invoking interpreter</a></li>
-  <li><a href="#template-with-logging" id="toc-template-with-logging">template with logging</a></li>
-  <li><a href="#resources" id="toc-resources">resources</a></li>
+  <li><a href="#add-argument" id="toc-add-argument">add argument</a></li>
+  <li><a href="#example" id="toc-example">example</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1105,71 +1104,54 @@ code.diff span.va { color: var(--solarized-green); font-weight: normal; font-sty
                 <a href="https://pandoc.org/">Pandoc</a> is a “universal document converter.” It is particularly good at generating HTML and <span class="math inline">\LaTeX</span> from Markdown. <br> <br>
             </span></span> </p>
             -->
-<h1 id="python-ecosystem">python ecosystem</h1>
+<h1 id="argparse">argparse</h1>
 <ul>
-<li>good checklist / process description for data analyse is propose in <a href="data-analyse-python-panda.html">data-analyse-python-panda</a></li>
-<li>writing scripts instead of bash: <a href="scripts-in-python.html">scripts-in-python</a></li>
-<li>as version control system for scripts is used <a href="git.html">git</a> system</li>
-<li>for separating different versions of python packages is used <a href="virtual-environment.html">virtual-environment</a></li>
+<li>is <a href="python.html">python</a> library for parsing command lines arguments</li>
+<li>usefull in <a href="scripts-in-python.html">scripts-in-python</a></li>
 </ul>
-<p>usefull modules:</p>
+<h2 id="add-argument">add argument</h2>
+<p>Most important method, arguments are defined here. Important arguments:</p>
 <ul>
-<li>for testing is used framework <a href="pytest.html">pytest</a></li>
-<li>for parsing command line arguments <a href="python-argparse.html">python-argparse</a></li>
-<li>for analyzing tabular data <a href="pandas.html">pandas</a></li>
-</ul>
-<h2 id="invoking-interpreter">invoking interpreter</h2>
+<li>first / second argument is name
 <ul>
-<li>can be used system default by <code>#!/usr/bin/env -S python3 -B</code>
-<ul>
-<li>argument <code>-S</code> in <code>env</code> allows to pass arguments to python interpreter</li>
-<li>argument <code>-B</code> in python interpreter forbid to create <code>__pycache__</code> directory with compiled byte code</li>
+<li>if begins with <code>-</code> or <code>--</code> it is optional</li>
+<li>otherwise it is mandatory positional argument</li>
+<li>if in name is <code>-</code> it is rewritten to <code>_</code> see <code>pkm_root</code> in example</li>
 </ul></li>
-<li>also can be used interpreter from virtual environment (e.g. see <code>pandas_cvicenie.py</code>)
+<li><code>action</code>
 <ul>
-<li><code>#!/home/peter/python/envs/pandas_rich/bin/python</code></li>
+<li><code>store</code> - default action for storing strings</li>
+<li><code>count</code> - for verbosity = number of arguments</li>
+<li><code>store_true</code> - classic optional flag, <code>--dry</code> in example section</li>
 </ul></li>
-</ul>
-<h2 id="template-with-logging">template with logging</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env -S python3 -B</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -*- coding: utf-8 -*-</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pathlib</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    logging.debug(<span class="ss">f&quot;entering main() function&quot;</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&quot;__main__&quot;</span>:</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># parser args</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span><span class="st">&quot;description in help&quot;</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&quot;-v&quot;</span>, <span class="st">&quot;--verbosity&quot;</span>, action<span class="op">=</span><span class="st">&quot;count&quot;</span>, default<span class="op">=</span><span class="dv">0</span>,  <span class="bu">help</span><span class="op">=</span><span class="st">&quot;increase output verbosity&quot;</span>)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&quot;-d&quot;</span>, <span class="st">&quot;--dry&quot;</span>, action<span class="op">=</span><span class="st">&quot;store_true&quot;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&quot;perform dry run&quot;</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(<span class="st">&quot;--pkm-root&quot;</span>, default<span class="op">=</span><span class="st">&quot;/data/notes/&quot;</span>,  <span class="bu">help</span><span class="op">=</span><span class="st">&quot;dir where to search for files, default /data/notes/&quot;</span>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># logger init</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    log_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">%(asctime)s</span><span class="st">:</span><span class="sc">%(levelname)s</span><span class="st">:</span><span class="sc">%(name)s</span><span class="st">:</span><span class="sc">%(funcName)s</span><span class="st">:</span><span class="sc">%(lineno)d</span><span class="st">:</span><span class="sc">%(message)s</span><span class="st">&#39;</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> args.verbosity <span class="op">==</span> <span class="dv">0</span>: logging_level <span class="op">=</span> logging.WARNING</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> args.verbosity <span class="op">==</span> <span class="dv">1</span>: logging_level <span class="op">=</span> logging.INFO</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: logging_level <span class="op">=</span> logging.DEBUG</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    logging.basicConfig(<span class="bu">format</span><span class="op">=</span>log_format, level<span class="op">=</span>logging_level)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># setting global variables</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    cur_dir <span class="op">=</span> pathlib.Path(<span class="va">__file__</span>).parent.resolve()</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="ss">f&quot;</span><span class="sc">{</span>cur_dir<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="ss">f&quot;</span><span class="sc">{</span>args<span class="sc">.</span>pkm_root<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="ss">f&quot;</span><span class="sc">{</span>args<span class="sc">.</span>dry<span class="op">=</span><span class="sc">}</span><span class="ss">&quot;</span>)</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    sys.exit(main())</span></code></pre></div>
-<h2 id="resources">resources</h2>
+<li><code>type</code>
 <ul>
-<li>calendar heat map <a href="https://www.guru99.com/calendar-in-python.html" class="uri">https://www.guru99.com/calendar-in-python.html</a></li>
+<li><code>int</code></li>
+<li><code>float</code></li>
+</ul></li>
+<li><code>default</code> default value, if argument is missing in command line</li>
+<li><code>help</code> - description of parameter in help message</li>
 </ul>
+<h2 id="example">example</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># parser args</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span><span class="st">&quot;description in help&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>parser.add_argument(<span class="st">&quot;-v&quot;</span>, <span class="st">&quot;--verbosity&quot;</span>, action<span class="op">=</span><span class="st">&quot;count&quot;</span>, default<span class="op">=</span><span class="dv">0</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&quot;increase output verbosity&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>parser.add_argument(<span class="st">&quot;-d&quot;</span>, <span class="st">&quot;--dry&quot;</span>, action<span class="op">=</span><span class="st">&quot;store_true&quot;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&quot;perform dry run&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>parser.add_argument(<span class="st">&quot;--pkm-root&quot;</span>, <span class="bu">help</span><span class="op">=</span><span class="st">&quot;root of the pkm - dir where to search for files&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># action=&quot;count&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> args.verbosity <span class="op">==</span> <span class="dv">0</span>: logging_level <span class="op">=</span> logging.WARNING</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="cf">elif</span> args.verbosity <span class="op">==</span> <span class="dv">1</span>: logging_level <span class="op">=</span> logging.INFO</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>: logging_level <span class="op">=</span> logging.DEBUG</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># action=&#39;store&#39;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>pkm_root <span class="op">=</span> <span class="st">&quot;/data/notes/&quot;</span> <span class="cf">if</span> args.pkm_root <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> args.pkm_root</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># action=&quot;store_true&quot;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> args.dry: dry_run<span class="op">=</span><span class="va">True</span></span></code></pre></div>
 </main>
 
 <script>
